@@ -1,110 +1,1472 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
+
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=0.85">
 
 <title>Painel Frota</title>
 
-<link rel="stylesheet" href="./css/styles.css">
+<style>
+
+/* ================= ROOT ================= */
+
+:root{
+
+  --bg:#071029;
+  --card:#0b1a3a;
+  --table:#0e224d;
+  --table-alt:#0c1d40;
+  --header:#2c4078;
+  --border:#1e2f5c;
+  --text:#ffffff;
+  --muted:#9fb3ff;
+  --green:#00ff9c;
+  --yellow:#ffcc00;
+  --red:#ff4d4d;
+  --lime:#7CFC00;
+  --blue:#6284fc;
+}
+
+/* ================= RESET ================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+
+  background:var(--bg);
+  color:var(--text);
+
+  font-family:Inter,Arial,sans-serif;
+
+  height:100vh;
+  overflow:hidden;
+
+}
+
+/* ================= HEADER ================= */
+
+.topbar{
+
+  display:grid;
+
+  grid-template-columns:
+    180px 1fr 260px;
+
+  gap:16px;
+
+  align-items:center;
+
+  padding:14px 20px;
+
+  background:#020617;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.1);
+}
+
+/* LEFT */
+
+.left{
+  display:flex;
+  align-items:center;
+}
+
+.logo{
+  height:65px;
+  object-fit:contain;
+}
+
+/* CENTER */
+
+.center{
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+}
+
+.title{
+
+  font-size:30px;
+  font-weight:700;
+
+  letter-spacing:1px;
+}
+
+/* STATUS */
+
+
+.ocupado{
+  background:rgba(255,77,77,.15);
+  color:var(--red);
+}
+
+.livre{
+  color:#00ff9c;
+  font-weight:700;
+}
+
+.ocupado{
+  color:#ff4d4d;
+  font-weight:700;
+}
+
+.manutencao{
+  color:#4da6ff;
+  font-weight:700;
+}
+
+.viagem{
+  color:#d66bff;
+  font-weight:700;
+}
+
+  .andamento{
+  background:rgba(255,77,77,.15);
+  color:var(--red);
+}
+
+/* RIGHT */
+
+.right{
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:flex-end;
+
+  gap:10px;
+}
+
+#clock{
+
+  font-size:24px;
+  font-weight:700;
+
+  color:var(--muted);
+}
+
+.actions{
+
+  display:flex;
+  gap:10px;
+}
+
+button{
+
+  border:none;
+  border-radius:10px;
+
+  padding:8px 14px;
+
+  cursor:pointer;
+
+  font-weight:700;
+
+  transition:.2s;
+}
+
+button:hover{
+  transform:scale(1.03);
+}
+
+/* ================= BUTTON STATES ================= */
+
+button.off{
+
+  background:#ff4d4d;
+
+  color:#ffffff;
+
+  box-shadow:
+    0 0 10px rgba(255,77,77,.5);
+}
+
+
+/* ================= MAIN ================= */
+
+main{
+
+  display:grid;
+  gap:12px;
+
+  padding:6px;
+
+  height:calc(100vh - 120px);
+
+  overflow:auto;
+}
+
+/* CARD */
+
+.card{
+
+  background:var(--card);
+
+  border-radius:16px;
+
+  overflow:auto;
+
+  border:
+    1px solid rgba(255,255,255,.08);
+
+  box-shadow:
+    0 4px 20px rgba(0,0,0,.35);
+}
+
+.card h2{
+
+  text-align:center;
+
+  padding:10px;
+
+  font-size:20px;
+}
+  
+  .dual-cards{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+
+    max-height:260px;
+  overflow-y:auto;
+}
+
+/* ================= TABLE ================= */
+
+table{
+
+  width:100%;
+
+  border-collapse:collapse;
+}
+
+thead th{
+
+  position:sticky;
+  top:0;
+
+  background:var(--header);
+
+  padding:10px;
+
+  border:
+    1px solid var(--border);
+
+  font-size:16px;
+}
+
+tbody td{
+
+  padding:10px;
+
+  border:
+    1px solid var(--border);
+
+  background:var(--table);
+
+  text-align:center;
+  font-size:16px;
+}
+
+tbody tr:nth-child(even) td{
+  background:var(--table-alt);
+}
+
+/* PAINEL, AGENDA E SERVIÇO SOCIAL */
+
+.painel .status-andamento td,
+.agenda .status-andamento td,
+.social .status-andamento td{
+  background:rgba(210, 150, 80); /*#FFD700 */
+  color:#FFF;
+}
+
+.painel .status-cancelado td,
+.agenda .status-cancelado td,
+.social .status-cancelado td{
+  background:rgba(255,77,77,.10); /* #DC143C;*/
+  color:#FFF;
+}
+
+.painel .status-concluido td,
+.agenda .status-concluido td,
+.social .status-concluido td{
+  background:#32CD32;
+  color:#FFF;
+}
+
+.painel .status-atendido td,
+.agenda .status-atendido td,
+.social .status-atendido td{
+  background:rgba(0,255,156,.10);  /* #00C853;*/
+  color:#FFF;
+}
+
+.painel .status-manutencao td,
+.agenda .status-manutencao td,
+.social .status-manutencao td{
+  background:rgba(110, 180, 255); /*#1E88E5 */
+  color:#FFF;
+}
+
+.painel .status-viagem td,
+.agenda .status-viagem td,
+.social .status-viagem td{
+  background:rgba(210, 140, 255); /*#8E24AA */
+  color:#FFF;
+}
+
+  /* ================= STATUS ICON ================= */
+
+.status-icon{
+
+  font-size:24px;
+
+  font-weight:700;
+
+  text-align:center;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media(max-width:768px){
+
+  .topbar{
+
+    grid-template-columns:auto auto auto;
+
+    text-align:center;
+  }
+
+  .left,
+  .center,
+  .right{
+
+    justify-content:center;
+    align-items:center;
+  }
+
+  .right{
+    align-items:center;
+  }
+
+  .title{
+    font-size:12px;
+  }
+
+ 
+  #clock{
+    font-size:8px;
+  }
+
+  .logo{
+    height:20px;
+  }
+
+  .actions button{
+    font-size:6px;
+    padding:4px 6px;
+    border-radius:2px;
+  }
+
+  table{
+    font-size:10px;
+  }
+
+  thead th,
+  tbody td{
+    padding:8px;
+  }
+
+.card h2{
+
+  text-align:center;
+
+  padding:12px;
+
+  font-size:12px;
+   }
+
+  .dual-cards{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+  .card-resumo{
+  max-height:260px;
+  overflow-y:auto;
+}
+  
+}
+
+</style>
 
 </head>
 
 <body>
 
-<!-- AUDIO -->
 <audio id="beep" preload="auto">
   <source src="./alerta.mp3" type="audio/mpeg">
 </audio>
 
 <!-- ================= HEADER ================= -->
 
-<!-- ================= HEADER ================= -->
-  <header class="topbar">
+<header class="topbar">
 
-    <div>
-      <img src="logo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
+  <div class="left">
+
+    <img
+      src="logo.png"
+      class="logo"
+      onerror="this.style.display='none'"
+    >
+
+  </div>
+
+  <div class="center">
+
+  <div class="title">
+    MOVIMENTAÇÃO DIÁRIA
+  </div>
+
+</div>
+
+<div class="right">
+
+    <div id="clock"></div>
+
+    <div class="actions">
+
+      <button id="toggle-audio">
+        🔊 SOM ON
+      </button>
+
+      <button id="toggle-fullscreen">
+        ⛶ TELA CHEIA
+      </button>
+
     </div>
 
-    <div class="center">
-      <h1 class="title">MOVIMENTAÇÃO DIÁRIA</h1>
-    </div>
+  </div>
 
-    <div class="right">
-      <div id="clock"></div>
+</header>
 
-      <div class="actions">
-        <button id="toggle-audio">🔊 SOM</button>
-        <button id="toggle-fullscreen">⛶ TELA</button>
-      </div>
-    </div>
+<!-- ================= MAIN ================= -->
 
-  </header>
+<main id="app"></main>
 
-<!-- ================= APP ================= -->
+<script>
 
-<main id="app" aria-live="polite"></main>
+/* ================= CONFIG ================= */
 
-<!-- ================= SCRIPTS ================= -->
+const SHEET_ID =
+  "14T7zF0likp8YGeycOYBcOs9INY9gvMzpt7SMfghE8P4";
 
-<script type="module">
+const TABS = [
 
-import "./js/app.js";
+  {
+    id:"veiculos",
+    title:"VEÍCULOS",
+    sheet:"VEÍCULOS",
 
-/* CLOCK */
+    headers:[
+      "TRAIL TXN1I89",
+      "CRETA TXJ6F18",
+      "CRETA TXJ6F19",
+      "CRETA TXJ6F20"
+    ]
+  },
+
+  {
+  id:"motoristas",
+  title:"MOTORISTAS",
+  sheet:"MOTORISTAS",
+
+  headers:[
+    "Motorista",
+    "Status",
+    "Condição",
+    
+  ]
+},
+
+  {
+    id:"painel",
+    title:"PAINEL",
+    sheet:"LANÇAMENTOS",
+
+    headers:[
+      "Data",
+      "Hora",
+      "Empregado",
+      "Veículo",      
+      "Passageiro/ Setor/ Motivo",
+      "Itinerário",
+      "Status"
+    ]
+  },
+
+  {
+    id:"agenda",
+    title:"AGENDA DO DIA",
+    sheet:"AGENDA DO DIA",
+
+    headers:[
+      "Data",
+      "Hora",
+      "Passageiro",
+      "Setor",
+      "Motivo",
+      "Itinerário",
+      "Status"
+    ]
+  },
+
+  {
+    id:"social",
+    title:"AGENDA SERVIÇO SOCIAL",
+    sheet:"AGENDA SERVIÇO SOCIAL",
+
+    headers:[
+      "Data",
+      "Período",
+      "Passageiro",
+      "Motivo",
+      "Itinerário",
+      "Status"
+    ]
+  }
+
+];
+  
+/* ================= STATUS CONFIG ================= */
+
+const STATUS = {
+
+  atendido:{
+    icon:'<span style="color:#00ff9c">✔</span>',
+    class:"status-atendido"
+  },
+
+  concluido:{
+    icon:'<span style="color:#7CFC00">✔</span>',
+    class:"status-concluido"
+  },
+
+  andamento:{
+    icon:'<span style="color:#ffcc00">⏳</span>',
+    class:"status-andamento"
+  },
+
+  cancelado:{
+    icon:'<span style="color:#ff4d4d">✖</span>',
+    class:"status-cancelado"
+  },
+
+  manutenção:{
+    icon:'<span style="color:#ff0000">🔧</span>',
+    class:"status-manutencao"
+  },
+
+   viagem:{
+    icon:'<span style="color:#ff9800">✈️</span>',
+    class:"status-viagem"
+  }
+
+};
+
+/* ================= HELPERS ================= */
+
+/* 🔹 converte resposta GViz em JSON */
+const parseGviz = txt =>
+
+  JSON.parse(
+    txt.substring(
+      txt.indexOf("{"),
+      txt.lastIndexOf("}") + 1
+    )
+  );
+
+/* 🔹 extrai valor da célula */
+const getCell = c =>
+  c?.f ?? c?.v ?? "";
+
+
+  
+function formatarData(valor){
+
+  if(!valor) return "";
+
+  if(valor instanceof Date){
+    return valor.toLocaleDateString("pt-BR");
+  }
+
+  const texto = String(valor);
+
+  const match =
+    texto.match(/\d{1,2}\/\d{1,2}\/\d{4}/);
+
+  if(match){
+    return match[0];
+  }
+
+  return texto;
+}
+  
+  
+
+/* 🔹 identifica chave do status */
+function getStatusKey(status=""){
+
+  status = status
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"");
+
+  if(status.includes("manutencao"))
+    return "manutenção";
+
+  if(status.includes("viagem"))
+    return "viagem";
+
+  if(status.includes("andamento"))
+    return "andamento";
+
+  if(status.includes("atendido"))
+    return "atendido";
+
+  if(status.includes("concluido"))
+    return "concluido";
+
+  if(status.includes("cancelado"))
+    return "cancelado";
+
+  return null;
+}
+  
+/* 🔹 retorna classe CSS */
+function getStatusClass(status){
+
+  const key =
+    getStatusKey(status);
+
+  return STATUS[key]?.class || "";
+}
+
+/* 🔹 retorna ícone */
+function getStatusIcon(status){
+
+  const key =
+    getStatusKey(status);
+
+  return STATUS[key]?.icon || "";
+}
+
+
+/* ================= FETCH ================= */
+
+async function fetchSheet(sheet){
+
+  try{
+
+     let query = "";
+
+    // Somente para a aba PAINEL
+    if(sheet === "LANÇAMENTOS"){
+      
+  query =
+  `select B,C,D,E,F,G,X `;
+    }
+
+if(sheet === "AGENDA DO DIA"){
+
+  query =
+    "select B,C,D,E,F,G,H";
+}
+
+
+    if(sheet === "AGENDA SERVIÇO SOCIAL"){
+
+  query =
+    "select B,C,D,F,G,H";
+}
+
+    if(sheet === "VEÍCULOS"){
+
+  query =
+    "select B,V,M,N";
+}
+
+     if(sheet === "MOTORISTAS"){
+
+  query =
+    "select A,B,C";
+}
+    
+
+    const url =
+  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
+  `?sheet=${encodeURIComponent(sheet)}` +
+  `&tq=${encodeURIComponent(query)}` +
+  `&tqx=out:json`;
+
+    const res = await fetch(url);
+
+    if(!res.ok){
+      throw new Error(
+        `HTTP ${res.status}`
+      );
+    }
+
+    return parseGviz(
+      await res.text()
+    );
+
+  }catch(err){
+
+    console.error(
+      `Erro na aba ${sheet}:`,
+      err
+    );
+
+    return {
+      table:{
+        rows:[]
+      }
+    };
+  }
+}
+/* ================= TABLE ================= */
+
+function renderTable(headers, rows){
+
+  return `
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          ${headers.map(h => `
+            <th>${h}</th>
+          `).join("")}
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        ${rows.map(row => {
+
+          const values =
+            (row.c || []).map(getCell);
+
+          
+const status =
+  values.at(-1)?.toLowerCase() || "";
+
+const rowClass =
+  getStatusClass(status);
+
+const icon =
+  getStatusIcon(status);
+
+return `
+
+  <tr class="${rowClass}">
+
+    ${values.map((v,i)=>{
+
+      const isLast =
+        i === values.length - 1;
+
+      return `
+        <td class="${isLast ? 'status-icon' : ''}">
+
+          ${isLast ? icon : v}
+
+        </td>
+      `;
+    }).join("")}
+
+  </tr>
+`;
+
+    }).join("")}
+          
+      </tbody>
+
+    </table>
+  `;
+}
+
+/* ================= GESTÃO DA TABLE ================= */
+
+function getDisponibilidade(nome, painelRows, tipo){
+
+  const procurado =
+    String(nome || "").trim().toUpperCase();
+
+  for(const row of painelRows){
+
+    const valores =
+      (row.c || []).map(getCell);
+
+    const veiculo =
+      String(valores[3] || "").trim().toUpperCase();
+
+    const motorista =
+      String(valores[2] || "").trim().toUpperCase();
+
+    const status =
+      String(valores[6] || "").trim().toUpperCase();
+
+    const encontrado =
+      tipo === "veiculo"
+        ? veiculo === procurado
+        : motorista === procurado;
+
+    if(!encontrado){
+      continue;
+    }
+
+    // MANUTENÇÃO
+    if(
+      status.includes("MANUTENÇÃO") ||
+      status.includes("MANUTENCAO")
+    ){
+
+      if(tipo === "veiculo"){
+        return '<span class="manutencao">🔵 MANUTENÇÃO</span>';
+      }
+
+      return '<span class="livre">🟢 LIVRE</span>';
+    }
+
+    // VIAGEM
+    if(status.includes("VIAGEM")){
+      return '<span class="viagem">🟣 VIAGEM</span>';
+    }
+
+    // OCUPADO
+    return '<span class="ocupado">🔴 OCUPADO</span>';
+  }
+
+  return '<span class="livre">🟢 LIVRE</span>';
+}  
+
+/* ================= VEÍCULOS ================= */
+  
+function renderVeiculos(rows, painelRows){
+
+  return `
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Placa</th>
+          <th>Status</th>
+          <th>Odômetro</th>
+          <th>Combustível</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        ${rows.map(row => {
+
+          const v =
+            (row.c || []).map(getCell);
+
+          return `
+
+            <tr>
+
+              <td>
+                <strong>${v[0] || ""}</strong>
+              </td>
+
+              <td>
+                ${getDisponibilidade(
+    v[0],
+    painelRows,
+    "veiculo"
+)}
+              </td>
+
+              <td>
+                ${v[2] || ""} km
+              </td>
+
+              <td>
+                ⛽ ${v[3] || ""}
+              </td>
+
+            </tr>
+
+          `;
+
+        }).join("")}
+
+      </tbody>
+
+    </table>
+
+  `;
+
+}
+
+/* ================= MOTORISTAS ================= */
+
+function renderMotoristas(rows, painelRows, linhaFlutuante){
+
+  return `
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Motorista</th>
+          <th>Status</th>
+          <th>Condição</th>
+          
+        </tr>
+      </thead>
+
+      <tbody>
+
+        ${rows.map(row => {
+
+          const v =
+            (row.c || []).map(getCell);
+
+          return `
+
+            <tr>
+
+              <td>
+                <strong>${v[0] || ""}</strong>
+              </td>
+
+              <td>
+                ${getDisponibilidade(
+    v[0],
+    painelRows,
+    "motorista"
+)}
+              </td>
+
+              <td>
+                ${v[2] || ""}
+              </td>
+
+            </tr>
+
+          `;
+
+        }).join("")}
+
+        ${linhaFlutuante}
+
+      </tbody>
+
+    </table>
+
+  `;
+}
+  
+
+/* ================= LOAD ================= */
+
+let lastHash = "";
+let firstLoad = true;
+
+async function loadAll(){
+
+  const app =
+    document.getElementById("app");
+
+  try{
+
+    const results =
+      await Promise.all(
+
+        TABS.map(
+          t => fetchSheet(t.sheet)
+        )
+      );
+
+    const hash =
+      JSON.stringify(results);
+
+    if(
+      !firstLoad &&
+      hash !== lastHash
+    ){
+      playBeep();
+    }
+
+    firstLoad = false;
+    lastHash = hash;
+
+app.innerHTML = "";
+
+/* VEÍCULOS + MOTORISTAS */
+
+    
+   
+
+const painelIndex =
+  TABS.findIndex(t => t.id === "painel");
+    
+
+const hojeStr = new Date().toLocaleDateString("pt-BR");
+    
+/*painelRows = painelRows.filter(r => {
+  const v = (r.c || []).map(getCell);
+  return String(v[0]).trim() === hojeStr;
+});
+*/
+
+let painelRows =
+  (results[painelIndex].table.rows || [])
+    .filter(row => {
+   
+      const v =
+        (row.c || []).map(getCell);
+
+      const status =
+        String(v[6] || "")
+          .toUpperCase()
+          .trim();
+
+      return (
+        status.includes("AGENDADO") ||
+        status.includes("EM ANDAMENTO") ||
+        status.includes("VIAGEM") ||
+        status.includes("MANUTENÇÃO") ||
+        status.includes("MANUTENCAO")
+      );
+    });
+
+
+painelRows.sort((a, b) => {
+
+  const va = (a.c || []).map(getCell);
+  const vb = (b.c || []).map(getCell);
+
+  const parse = (dataStr, horaStr) => {
+
+    if (!dataStr) return new Date(0);
+
+    const d = dataStr.includes("/")
+      ? dataStr.split("/")
+      : new Date(dataStr);
+
+    const dia = Array.isArray(d) ? d[0] : d.getDate();
+    const mes = Array.isArray(d) ? d[1] : d.getMonth() + 1;
+    const ano = Array.isArray(d) ? d[2] : d.getFullYear();
+
+    const h = (horaStr || "00:00").split(":");
+
+    return new Date(
+      Number(ano),
+      Number(mes) - 1,
+      Number(dia),
+      Number(h[0] || 0),
+      Number(h[1] || 0)
+    );
+  };
+
+  return parse(va[0], va[1]) - parse(vb[0], vb[1]);
+});
+
+ 
+
+const agendaIndex =
+  TABS.findIndex(t => t.id === "agenda");
+
+const d = new Date();
+
+const hoje =
+  `${String(d.getDate()).padStart(2,"0")}/` +
+  `${String(d.getMonth()+1).padStart(2,"0")}/` +
+  `${d.getFullYear()}`;
+
+const agendaRows =
+  (results[agendaIndex].table.rows || [])
+    .filter(row => {
+
+      const v = (row.c || []).map(getCell);
+
+      return String(v[0] || "").trim() === hoje;
+    });
+
+
+
+/*
+agendaRows.sort((a, b) => {
+
+  const va = (a.c || []).map(getCell);
+  const vb = (b.c || []).map(getCell);
+
+  const parse = (dataStr, horaStr) => {
+
+    if (!dataStr) return new Date(0);
+
+    const [dia, mes, ano] = String(dataStr).split("/");
+
+    const [h, m] = String(horaStr || "00:00").split(":");
+
+    return new Date(
+      Number(ano),
+      Number(mes) - 1,
+      Number(dia),
+      Number(h || 0),
+      Number(m || 0)
+    );
+  };
+
+  return parse(va[0], va[1]) - parse(vb[0], vb[1]);
+});
+*/
+
+    agendaRows.sort((a,b)=> {
+  const va = (a.c||[]).map(getCell);
+  const vb = (b.c||[]).map(getCell);
+
+  return new Date(`${va[0]} ${va[1]}`) - new Date(`${vb[0]} ${vb[1]}`);
+});
+    
+
+    
+
+const socialIndex =
+  TABS.findIndex(t => t.id === "social");
+
+const socialRows =
+  (results[socialIndex].table.rows || [])
+    .filter(row => {
+
+      const v =
+        (row.c || []).map(getCell);
+
+      const data =
+        String(v[0] || "").trim();
+
+      return data === hoje;
+    });
+
+    
+    
+
+const veiculosIndex =
+  TABS.findIndex(t => t.id === "veiculos");
+
+const motoristasIndex =
+  TABS.findIndex(t => t.id === "motoristas");
+    
+
+const motoristasRows =
+  results[motoristasIndex].table.rows || [];
+
+const motoristaFlutuante =
+  painelRows.find(row => {
+
+    const v =
+      (row.c || []).map(getCell);
+
+    const nome =
+      String(v[2] || "").trim();
+
+    return !motoristasRows.some(r => {
+
+      const m =
+        (r.c || []).map(getCell);
+
+      return (
+        String(m[0] || "").trim() === nome
+      );
+    });
+
+  });
+
+let linhaFlutuante = "";
+
+if(motoristaFlutuante){
+
+  const v =
+    (motoristaFlutuante.c || []).map(getCell);
+
+  const nome =
+    String(v[2] || "").trim();
+
+  const status =
+    String(v[6] || "").toUpperCase();
+
+  let textoStatus =
+    "🔴 OCUPADO";
+
+  if(status.includes("VIAGEM")){
+    textoStatus = "✈️ VIAGEM";
+  }
+
+  if(
+    status.includes("MANUTENÇÃO") ||
+    status.includes("MANUTENCAO")
+  ){
+    textoStatus = "🔧 MANUTENÇÃO";
+  }
+
+  linhaFlutuante = `
+    <tr>
+      <td><strong>${nome}</strong></td>
+      <td>${textoStatus}</td>
+      <td>USUÁRIO CADASTRADO</td>
+    </tr>
+  `;
+}
+    
+
+
+  const dual = document.createElement("div");
+dual.className = "dual-cards";
+
+[veiculosIndex,motoristasIndex].forEach(index=>{
+
+  const tab = TABS[index];
+  
+  const rows = results[index].table.rows || [];
+
+  const section =
+    document.createElement("section");
+
+  section.className =
+    tab.id === "veiculos" ||
+    tab.id === "motoristas"
+    ? "card card-resumo"
+    : "card";
+
+ section.innerHTML = `
+  <h2>${tab.title}</h2>
+
+  ${
+    tab.id === "veiculos"
+      ? renderVeiculos(rows, painelRows)
+      : renderMotoristas(
+    rows,
+    painelRows,
+    linhaFlutuante
+  )
+  }
+`;
+
+  dual.appendChild(section);
+
+});
+
+app.appendChild(dual);
+
+/* DEMAIS TABELAS */
+
+results.forEach((data,index)=>{
+
+  const tab = TABS[index];
+
+  if(
+    tab.id === "veiculos" ||
+    tab.id === "motoristas"
+  ) return;
+  
+
+let rows;
+
+if(tab.id === "painel"){
+  rows = painelRows;
+}
+else if(tab.id === "agenda"){
+  rows = agendaRows;
+}
+else if(tab.id === "social"){
+  rows = socialRows;
+}
+else{
+  rows = data.table.rows || [];
+}
+
+  
+
+  const section =
+  document.createElement("section");
+
+section.className = `card ${tab.id}`;
+
+  
+
+section.innerHTML = `
+
+<h2 style="
+  position:relative;
+  text-align:center;
+">
+
+  ${tab.title}
+
+  ${
+    tab.id === "agenda"
+    ? `
+      <span
+        onclick="window.open('agenda.html','_blank')"
+        title="Agenda Completa"
+        style="
+          position:absolute;
+          right:15px;
+          top:50%;
+          transform:translateY(-50%);
+          cursor:pointer;
+          font-size:22px;
+          user-select:none;
+        "
+      >
+        📅
+      </span>
+    `
+    : ""
+  }
+
+</h2>
+
+
+  ${renderTable(tab.headers, rows)}
+
+`;
+
+  app.appendChild(section);
+
+
+ 
+    });
+
+  }catch(err){
+
+    console.error(err);
+
+    app.innerHTML =
+      "<div>Erro ao carregar dados.</div>";
+  }
+}
+
+/* ================= CLOCK ================= */
+
 function updateClock(){
+
   const now = new Date();
-  document.getElementById("clock").innerText =
-    now.toLocaleDateString("pt-BR") + " — " +
-    now.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+
+  document.getElementById(
+    "clock"
+  ).innerText =
+
+    now.toLocaleDateString("pt-BR") +
+
+    " — " +
+
+    now.toLocaleTimeString(
+      "pt-BR",
+      {
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
 }
 
 setInterval(updateClock,1000);
+
 updateClock();
 
-/* AUDIO */
-const audio = document.getElementById("beep");
-const audioBtn = document.getElementById("toggle-audio");
+/* ================= AUDIO ================= */
 
-let sound = true;
+const audio =
+  document.getElementById("beep");
 
-function updateAudio(){
-  audioBtn.innerText = sound ? "🔊 SOM ON" : "🔇 SOM OFF";
-  audioBtn.classList.toggle("off", !sound);
+const audioBtn =
+  document.getElementById("toggle-audio");
+
+let soundEnabled = true;
+
+function updateAudioButton(){
+
+  if(soundEnabled){
+
+    audioBtn.innerText = "🔊 SOM ON";
+
+    audioBtn.classList.remove("off");
+
+  }else{
+
+    audioBtn.innerText = "🔇 SOM OFF";
+
+    audioBtn.classList.add("off");
+  }
 }
 
-audioBtn.onclick = ()=>{
-  sound = !sound;
-  updateAudio();
+audioBtn.onclick = () => {
+
+  soundEnabled = !soundEnabled;
+
+  updateAudioButton();
 };
 
-window.playBeep = () => {
-  if(!sound) return;
+function playBeep(){
+
+  if(!soundEnabled)
+    return;
+
   audio.currentTime = 0;
-  audio.play().catch(()=>{});
-};
 
-/* FULLSCREEN */
-document.getElementById("toggle-fullscreen").onclick = async ()=>{
+  audio.play().catch(()=>{});
+
+  updateAudioButton();
+}
+
+/* ================= FULLSCREEN ================= */
+
+document.getElementById(
+  "toggle-fullscreen"
+).onclick = async () => {
+
   if(!document.fullscreenElement){
-    await document.documentElement.requestFullscreen();
+
+    await document.documentElement
+      .requestFullscreen();
+
   }else{
+
     await document.exitFullscreen();
   }
 };
 
+/* ================= INIT ================= */
+
+loadAll();
+
+setInterval(loadAll,30000);
+
 </script>
-
-
-
-  <script src="js/styles.js" defer></script>
-  <script src="js/config.js" defer></script>
-  <script src="js/api.js" defer></script>
-  <script src="js/store.js" defer></script>
-  <script src="js/utils.js" defer></script>
-  <script src="js/render.js" defer></script>
-  <script src="js/app.js" defer></script>
 
 </body>
 </html>
+
