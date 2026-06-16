@@ -1,50 +1,26 @@
-export function getDisponibilidade(
-    nome,
-    painelRows,
-    tipo
-){
+function getDisponibilidade(nome, painelRows, tipo){
 
-    const procurado =
-    String(nome)
-    .trim()
-    .toUpperCase();
+  const alvo = String(nome).toUpperCase();
 
-    for(const row of painelRows){
+  for(const row of painelRows){
 
-        const valores =
-        (row.c || []).map(
-            c => c?.f ?? c?.v ?? ""
-        );
+    const v = (row.c || []).map(getCell);
 
-        const veiculo =
-        String(valores[3] || "")
-        .trim()
-        .toUpperCase();
+    const veiculo = String(v[3] || "").toUpperCase();
+    const motorista = String(v[2] || "").toUpperCase();
+    const status = String(v[6] || "").toUpperCase();
 
-        const motorista =
-        String(valores[2] || "")
-        .trim()
-        .toUpperCase();
+    const match = tipo === "veiculo"
+      ? veiculo === alvo
+      : motorista === alvo;
 
-        const status =
-        String(valores[6] || "")
-        .toUpperCase();
+    if(!match) continue;
 
-        const encontrado =
-        tipo === "veiculo"
-        ? veiculo === procurado
-        : motorista === procurado;
+    if(status.includes("MANUTEN")) return "🔧 MANUTENÇÃO";
+    if(status.includes("VIAGEM")) return "✈️ VIAGEM";
 
-        if(!encontrado) continue;
+    return "🔴 OCUPADO";
+  }
 
-        if(status.includes("VIAGEM"))
-            return "🟣 VIAGEM";
-
-        if(status.includes("MANUTEN"))
-            return "🔵 MANUTENÇÃO";
-
-        return "🔴 OCUPADO";
-    }
-
-    return "🟢 LIVRE";
+  return "🟢 LIVRE";
 }
