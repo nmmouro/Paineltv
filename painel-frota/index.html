@@ -1,98 +1,101 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Painel Frota</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <!-- ================= META ================= -->
-  <meta name="description" content="Painel de controle de frota e movimentações em tempo real" />
-  <meta name="theme-color" content="#071029" />
+<title>Painel Frota</title>
 
-  <!-- ================= CSS ================= -->
-  <link rel="stylesheet" href="./css/variables.css" />
-  <link rel="stylesheet" href="./css/layout.css" />
-  <link rel="stylesheet" href="./css/tables.css" />
-  <link rel="stylesheet" href="./css/status.css" />
-  <link rel="stylesheet" href="./css/mobile.css" />
-  <link rel="stylesheet" href="./css/main.css" />
+<link rel="stylesheet" href="./css/styles.css">
 
 </head>
 
 <body>
 
-  <!-- ================= AUDIO ================= -->
-  <audio id="beep" preload="auto">
-    <source src="./assets/alerta.mp3" type="audio/mpeg" />
-  </audio>
+<!-- AUDIO -->
+<audio id="beep" preload="auto">
+  <source src="./alerta.mp3" type="audio/mpeg">
+</audio>
 
-  <!-- ================= HEADER ================= -->
-  <header class="topbar" role="banner">
+<!-- ================= HEADER ================= -->
 
-    <!-- ESQUERDA -->
-    <div class="left">
-      <img 
-        src="./assets/logo.png" 
-        alt="Logo da empresa" 
-        class="logo"
-        onerror="this.style.display='none'"
-      />
+<header class="topbar">
+
+  <div>
+    <img src="logo.png" class="logo" onerror="this.style.display='none'">
+  </div>
+
+  <div class="title">
+    MOVIMENTAÇÃO DIÁRIA
+  </div>
+
+  <div class="right">
+
+    <div id="clock"></div>
+
+    <div class="actions">
+      <button id="toggle-audio">🔊 SOM ON</button>
+      <button id="toggle-fullscreen">⛶ TELA CHEIA</button>
     </div>
 
-    <!-- CENTRO -->
-    <div class="center">
-      <h1 class="title">MOVIMENTAÇÃO DIÁRIA</h1>
-    </div>
+  </div>
 
-    <!-- DIREITA -->
-    <div class="right">
+</header>
 
-      <div id="clock" aria-live="polite"></div>
+<!-- ================= APP ================= -->
 
-      <div class="actions">
-        <button id="toggle-audio" type="button">
-          🔊 SOM ON
-        </button>
+<main id="app"></main>
 
-        <button id="toggle-fullscreen" type="button">
-          ⛶ TELA CHEIA
-        </button>
-      </div>
+<!-- ================= SCRIPTS ================= -->
 
-    </div>
+<script type="module">
 
-  </header>
+import "./js/app.js";
 
-  <!-- ================= APP ================= -->
-  <main id="app" role="main" aria-live="polite"></main>
+/* CLOCK */
+function updateClock(){
+  const now = new Date();
+  document.getElementById("clock").innerText =
+    now.toLocaleDateString("pt-BR") + " — " +
+    now.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+}
 
-  <!-- ================= SCRIPTS (ORDEM CONTROLADA) ================= -->
+setInterval(updateClock,1000);
+updateClock();
 
-  <!-- CORE -->
-  <script src="./js/config.js" defer></script>
-  <script src="./js/helpers.js" defer></script>
-  <script src="./js/status.js" defer></script>
-  <script src="./js/api.js" defer></script>
+/* AUDIO */
+const audio = document.getElementById("beep");
+const audioBtn = document.getElementById("toggle-audio");
 
-  <!-- RENDER -->
-  <script src="./js/render/tables.js" defer></script>
-  <script src="./js/render/veiculos.js" defer></script>
-  <script src="./js/render/motoristas.js" defer></script>
+let sound = true;
 
-  <!-- SERVICES -->
-  <script src="./js/services/disponibilidade.js" defer></script>
-  <script src="./js/services/painel.js" defer></script>
-  <script src="./js/services/agenda.js" defer></script>
+function updateAudio(){
+  audioBtn.innerText = sound ? "🔊 SOM ON" : "🔇 SOM OFF";
+  audioBtn.classList.toggle("off", !sound);
+}
 
-  <!-- UI -->
-  <script src="./js/ui/clock.js" defer></script>
-  <script src="./js/ui/audio.js" defer></script>
-  <script src="./js/ui/fullscreen.js" defer></script>
+audioBtn.onclick = ()=>{
+  sound = !sound;
+  updateAudio();
+};
 
-  <!-- APP INIT -->
-  <script src="./js/app.js" defer></script>
+window.playBeep = () => {
+  if(!sound) return;
+  audio.currentTime = 0;
+  audio.play().catch(()=>{});
+};
+
+/* FULLSCREEN */
+document.getElementById("toggle-fullscreen").onclick = async ()=>{
+  if(!document.fullscreenElement){
+    await document.documentElement.requestFullscreen();
+  }else{
+    await document.exitFullscreen();
+  }
+};
+
+</script>
 
 </body>
 </html>
