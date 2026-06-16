@@ -1,20 +1,31 @@
 <main>
-  <section class="card">
-    <h2>PAINEL</h2>
-    <div id="painel">Carregando...</div>
-  </section>
+ </div>
 
-  <section class="card">
-    <h2>AGENDA DO DIA</h2>
-    <div id="agenda">Carregando...</div>
-  </section>
+  <div class="center">
 
-  <section class="card">
-    <h2 id="carousel-title">AGENDA SERVIÇO SOCIAL</h2>
-    <div id="carousel">
-      <div id="carousel-ss"></div>
-      <div id="carousel-avisos" style="display:none"></div>
+  <div class="title">
+    MOVIMENTAÇÃO DIÁRIA
+  </div>
+
+</div>
+
+<div class="right">
+
+    <div id="clock"></div>
+
+    <div class="actions">
+
+      <button id="toggle-audio">
+        🔊 SOM ON
+      </button>
+
+      <button id="toggle-fullscreen">
+        ⛶ TELA CHEIA
+      </button>
+
     </div>
-  </section>
+
+  </div>
+
 </main>
 
