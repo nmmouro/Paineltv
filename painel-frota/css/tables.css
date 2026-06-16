@@ -21,8 +21,3 @@ table {
   tbody tr:nth-child(even) {
     background: var(--table-alt);
   }
-
-  .status-icon {
-    font-size: 18px;
-  }
-
