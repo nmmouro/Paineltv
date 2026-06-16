@@ -1,18 +1,29 @@
-import { startClock } from "./ui/clock.js";
-import { initAudio } from "./ui/audio.js";
-import { initFullscreen } from "./ui/fullscreen.js";
+async function loadAll(){
 
-import { loadPainel } from "./services/painel.js";
+  const app = document.getElementById("app");
 
-startClock();
+  const results = await Promise.all(TABS.map(t=>fetchSheet(t.sheet)));
 
-initAudio();
+  app.innerHTML = "";
 
-initFullscreen();
+  const painelIndex = TABS.findIndex(t=>t.id==="painel");
+  const painelRows = results[painelIndex].table.rows || [];
 
-loadPainel();
+  results.forEach((data,index)=>{
 
-setInterval(
-loadPainel,
-30000
-);
+    const tab = TABS[index];
+
+    const section = document.createElement("section");
+    section.className = "card";
+
+    section.innerHTML = `
+      <h2>${tab.title}</h2>
+      ${renderTable(tab.headers, data.table.rows)}
+    `;
+
+    app.appendChild(section);
+  });
+}
+
+loadAll();
+setInterval(loadAll,30000);
