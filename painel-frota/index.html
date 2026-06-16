@@ -1,63 +1,98 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Painel Frota</title>
 
-<link rel="stylesheet" href="./css/variables.css">
-<link rel="stylesheet" href="./css/layout.css">
-<link rel="stylesheet" href="./css/tables.css">
-<link rel="stylesheet" href="./css/status.css">
-<link rel="stylesheet" href="./css/mobile.css">
-<link rel="stylesheet" href="./css/main.css">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Painel Frota</title>
+
+  <!-- ================= META ================= -->
+  <meta name="description" content="Painel de controle de frota e movimentações em tempo real" />
+  <meta name="theme-color" content="#071029" />
+
+  <!-- ================= CSS ================= -->
+  <link rel="stylesheet" href="./css/variables.css" />
+  <link rel="stylesheet" href="./css/layout.css" />
+  <link rel="stylesheet" href="./css/tables.css" />
+  <link rel="stylesheet" href="./css/status.css" />
+  <link rel="stylesheet" href="./css/mobile.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+
 </head>
 
 <body>
 
-<audio id="beep">
-  <source src="./assets/alerta.mp3">
-</audio>
+  <!-- ================= AUDIO ================= -->
+  <audio id="beep" preload="auto">
+    <source src="./assets/alerta.mp3" type="audio/mpeg" />
+  </audio>
 
-<header class="topbar">
-  <div class="left">
-    <img src="./assets/logo.png" class="logo">
-  </div>
+  <!-- ================= HEADER ================= -->
+  <header class="topbar" role="banner">
 
-  <div class="center">
-    <div class="title">MOVIMENTAÇÃO DIÁRIA</div>
-  </div>
-
-  <div class="right">
-    <div id="clock"></div>
-
-    <div class="actions">
-      <button id="toggle-audio">🔊 SOM ON</button>
-      <button id="toggle-fullscreen">⛶ TELA CHEIA</button>
+    <!-- ESQUERDA -->
+    <div class="left">
+      <img 
+        src="./assets/logo.png" 
+        alt="Logo da empresa" 
+        class="logo"
+        onerror="this.style.display='none'"
+      />
     </div>
-  </div>
-</header>
 
-<main id="app"></main>
+    <!-- CENTRO -->
+    <div class="center">
+      <h1 class="title">MOVIMENTAÇÃO DIÁRIA</h1>
+    </div>
 
-<script src="./js/config.js"></script>
-<script src="./js/helpers.js"></script>
-<script src="./js/status.js"></script>
-<script src="./js/api.js"></script>
+    <!-- DIREITA -->
+    <div class="right">
 
-<script src="./js/render/tables.js"></script>
-<script src="./js/render/veiculos.js"></script>
-<script src="./js/render/motoristas.js"></script>
+      <div id="clock" aria-live="polite"></div>
 
-<script src="./js/services/disponibilidade.js"></script>
-<script src="./js/services/painel.js"></script>
-<script src="./js/services/agenda.js"></script>
+      <div class="actions">
+        <button id="toggle-audio" type="button">
+          🔊 SOM ON
+        </button>
 
-<script src="./js/ui/clock.js"></script>
-<script src="./js/ui/audio.js"></script>
-<script src="./js/ui/fullscreen.js"></script>
+        <button id="toggle-fullscreen" type="button">
+          ⛶ TELA CHEIA
+        </button>
+      </div>
 
-<script src="./js/app.js"></script>
+    </div>
+
+  </header>
+
+  <!-- ================= APP ================= -->
+  <main id="app" role="main" aria-live="polite"></main>
+
+  <!-- ================= SCRIPTS (ORDEM CONTROLADA) ================= -->
+
+  <!-- CORE -->
+  <script src="./js/config.js" defer></script>
+  <script src="./js/helpers.js" defer></script>
+  <script src="./js/status.js" defer></script>
+  <script src="./js/api.js" defer></script>
+
+  <!-- RENDER -->
+  <script src="./js/render/tables.js" defer></script>
+  <script src="./js/render/veiculos.js" defer></script>
+  <script src="./js/render/motoristas.js" defer></script>
+
+  <!-- SERVICES -->
+  <script src="./js/services/disponibilidade.js" defer></script>
+  <script src="./js/services/painel.js" defer></script>
+  <script src="./js/services/agenda.js" defer></script>
+
+  <!-- UI -->
+  <script src="./js/ui/clock.js" defer></script>
+  <script src="./js/ui/audio.js" defer></script>
+  <script src="./js/ui/fullscreen.js" defer></script>
+
+  <!-- APP INIT -->
+  <script src="./js/app.js" defer></script>
 
 </body>
 </html>
