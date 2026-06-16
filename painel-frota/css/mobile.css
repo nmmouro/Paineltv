@@ -1,1 +1,18 @@
+ @media (min-width: 1600px) {
+    body {
+      font-size: 18px;
+    }
+
+    .title {
+      font-size: 34px;
+    }
+
+    #clock {
+      font-size: 22px;
+    }
+
+    table {
+      font-size: 18px;
+    }
+  }
 
