@@ -1182,7 +1182,11 @@ const motoristasIndex =
     
 
 const motoristasRows =
-  results[motoristasIndex].table.rows || [];
+  results[motoristasIndex].table.rows || []
+  .filter(row => {
+      const v = (row.c || []).map(getCell);
+      return v[0] !== "Motorista";
+    });
 
 const motoristaFlutuante =
   painelRows.find(row => {
