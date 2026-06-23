@@ -1035,12 +1035,12 @@ const painelIndex =
     
 
 const hojeStr = new Date().toLocaleDateString("pt-BR");
-    
+/*    
   painelRows = painelRows.filter(r => {
   const v = (r.c || []).map(getCell);
   return String(v[0]).trim() === hojeStr;
 });
-
+*/
 
 let painelRows =
   (results[painelIndex].table.rows || [])
@@ -1234,7 +1234,7 @@ if(motoristaFlutuante){
 
   linhaFlutuante = `
     <tr>
-      <td><strong>${nome}</strong></td>
+      <td><strong>${motorista}</strong></td>
       <td>${textoStatus}</td>
       <td>USUÁRIO CADASTRADO</td>
     </tr>
