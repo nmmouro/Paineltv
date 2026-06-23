@@ -989,7 +989,12 @@ function renderMotoristas(rows, painelRows, linhaFlutuante){
   `;
 }
   
-
+console.table(
+  motoristasRows.map(r =>
+    (r.c || []).map(getCell)
+  )
+);
+  
 /* ================= LOAD ================= */
 
 let lastHash = "";
