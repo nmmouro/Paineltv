@@ -27,15 +27,10 @@
   --red:#ff4d4d;
   --lime:#7CFC00;
   --blue:#6284fc;
+  --row-height:44px; /* altura reduzida por linha nas tabelas */
 }
 
 /* ================= RESET ================= */
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
 
 body{
 
@@ -114,10 +109,6 @@ body{
   font-weight:700;
 }
 
-.ocupado{
-  color:#ff4d4d;
-  font-weight:700;
-}
 
 .manutencao{
   color:#4da6ff;
@@ -194,15 +185,11 @@ button.off{
 /* ================= MAIN ================= */
 
 main{
-
   display:grid;
-  gap:12px;
-
+  grid-template-rows:auto 1fr 1fr 1fr;
+  gap:6px;
   padding:6px;
-
-  height:calc(100vh - 120px);
-
-  overflow:auto;
+  height:calc(100vh - 95px);
 }
 
 /* CARD */
